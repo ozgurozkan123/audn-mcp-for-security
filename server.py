@@ -1,6 +1,5 @@
 import os
 import subprocess
-import shlex
 from typing import Optional
 from fastmcp import FastMCP
 
@@ -94,14 +93,14 @@ def do_katana(
         return f"Error executing katana: {str(e)}"
 
 
-# Run the server
+# Run the server with streamable HTTP transport
 if __name__ == "__main__":
     # Get port from environment (Render sets this automatically)
     port = int(os.getenv("PORT", 8000))
 
+    # Use streamable-http transport for POST-based MCP communication
     mcp.run(
-        transport="sse",  # SSE transport for remote connections
+        transport="streamable-http",  # HTTP transport for POST requests at /mcp
         host="0.0.0.0",  # MUST bind to 0.0.0.0 for containers
         port=port,  # Use PORT from environment
-        path="/mcp",  # MCP endpoint path (SSE at /mcp/sse, HTTP at /mcp)
     )
